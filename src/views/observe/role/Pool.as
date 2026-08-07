@@ -37,6 +37,8 @@ package views.observe.role
    
    public class Pool extends Group
    {
+
+      use namespace mx_internal; //
       
       private var _98629247group:UIComponent;
       

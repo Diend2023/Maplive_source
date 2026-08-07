@@ -38,6 +38,8 @@ package views.observe.role
    
    public class Attribute extends Group
    {
+
+      use namespace mx_internal; //
       
       private var _544569598frameAttr:FrameAttribute;
       

@@ -39,10 +39,13 @@ package views.alert
    
    public class CreateTMX extends AlertRef
    {
+
+      use namespace mx_internal; //
       
       public static const TMXDATA:String = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><map version=\"1.0\" orientation=\"orthogonal\" width=\"64\" height=\"40\" tilewidth=\"32\" tileheight=\"32\"><objectgroup name=\"hit_layer\" width=\"64\" height=\"40\"/></map>";
       
-      private static var _skinParts:Object = {
+      // private static var _skinParts:Object = {
+      private var _skinParts:Object = { //
          "contentGroup":false,
          "titleDisplay":false,
          "controlBarGroup":false

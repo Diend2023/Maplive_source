@@ -8,7 +8,8 @@ package views
    public class RefObserve extends NavigatorContent
    {
       
-      private static var _skinParts:Object = {"contentGroup":false};
+      // private static var _skinParts:Object = {"contentGroup":false};
+      private var _skinParts:Object = {"contentGroup":false}; //
       
       protected var _change:Boolean = false;
       

@@ -37,8 +37,11 @@ package views
    
    public class AttributeView extends NavigatorContent
    {
+
+      use namespace mx_internal; //
       
-      private static var _skinParts:Object = {"contentGroup":false};
+      // private static var _skinParts:Object = {"contentGroup":false};
+      private var _skinParts:Object = {"contentGroup":false}; //
       
       private var _968992034eventAttribute:EventAttribute;
       

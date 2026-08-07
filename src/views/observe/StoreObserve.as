@@ -71,7 +71,8 @@ package views.observe
       
       public static const code:Class = StoreObserve_code;
       
-      private static var _skinParts:Object = {"contentGroup":false};
+      // private static var _skinParts:Object = {"contentGroup":false};
+      private var _skinParts:Object = {"contentGroup":false}; //
       
       private var _3322014list:List;
       

@@ -36,6 +36,8 @@ package views.attribute.item
    
    public class XmlAttributeItem extends ItemRenderer
    {
+
+      use namespace mx_internal; //
       
       private var _106808059pname:Label;
       

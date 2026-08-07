@@ -16,6 +16,8 @@ package skins
    
    public class TabBarSkin extends Skin implements IStateClient2
    {
+
+      use namespace mx_internal; //
       
       private var _385593099dataGroup:DataGroup;
       

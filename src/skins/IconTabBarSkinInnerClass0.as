@@ -31,7 +31,8 @@ package skins
    public class IconTabBarSkinInnerClass0 extends ButtonBarButton
    {
       
-      private static var _skinParts:Object = {
+      // private static var _skinParts:Object = {
+      private var _skinParts:Object = { //
          "iconDisplay":false,
          "labelDisplay":false
       };

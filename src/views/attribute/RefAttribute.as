@@ -8,7 +8,8 @@ package views.attribute
    public class RefAttribute extends NavigatorContent
    {
       
-      private static var _skinParts:Object = {"contentGroup":false};
+      // private static var _skinParts:Object = {"contentGroup":false};
+      private var _skinParts:Object = {"contentGroup":false}; //
       
       public var blends:ArrayCollection;
       

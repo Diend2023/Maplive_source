@@ -17,8 +17,11 @@ package views
    
    public class StartPage extends RefObserve
    {
+
+      use namespace mx_internal; //
       
-      private static var _skinParts:Object = {"contentGroup":false};
+      // private static var _skinParts:Object = {"contentGroup":false};
+      private var _skinParts:Object = {"contentGroup":false}; //
       
       private var _3322014list:List;
       

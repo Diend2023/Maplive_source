@@ -14,8 +14,11 @@ package views.tools
    
    public class DrawTools extends NavigatorContent
    {
+
+      use namespace mx_internal; //
       
-      private static var _skinParts:Object = {"contentGroup":false};
+      // private static var _skinParts:Object = {"contentGroup":false};
+      private var _skinParts:Object = {"contentGroup":false}; //
       
       private var _827666741scaleSlider:HSlider;
       

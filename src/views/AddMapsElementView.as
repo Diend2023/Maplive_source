@@ -44,8 +44,11 @@ package views
    
    public class AddMapsElementView extends Panel
    {
+
+      use namespace mx_internal; //
       
-      private static var _skinParts:Object = {
+      // private static var _skinParts:Object = {
+      private var _skinParts:Object = { //
          "contentGroup":false,
          "titleDisplay":false,
          "controlBarGroup":false

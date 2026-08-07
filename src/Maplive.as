@@ -69,7 +69,8 @@ package
       
       private static var _watcherSetupUtil:IWatcherSetupUtil2;
       
-      private static var _skinParts:Object = {
+      // private static var _skinParts:Object = {
+      private var _skinParts:Object = { //
          "gripper":false,
          "contentGroup":false,
          "statusBar":false,
@@ -214,19 +215,23 @@ package
          self = this;
          this.addEventListener(OpenEvent.OPEN,this.onOpen);
          this.addEventListener(OpenEvent.ACTION_EVENT,this.onActionEvent);
+         this.addEventListener(Event.ADDED_TO_STAGE,this.onAdded); // 提前添加监听
          RightUtils.init();
-         NativeApplication.nativeApplication.menu.removeItemAt(1);
-         NativeApplication.nativeApplication.menu.removeItemAt(1);
-         var _loc1_:NativeMenu = new NativeMenu();
-         var _loc2_:NativeMenuItem = new NativeMenuItem("保存");
-         _loc1_.addItem(_loc2_);
-         NativeApplication.nativeApplication.menu.addSubmenu(_loc1_,"文件");
-         var _loc3_:NativeMenu = new NativeMenu();
-         _loc3_.addItem(new NativeMenuItem("版本信息"));
-         NativeApplication.nativeApplication.menu.addSubmenu(_loc3_,"关于");
+         if(NativeApplication.nativeApplication.menu) // 修复高版本air启动报错
+         { //
+            NativeApplication.nativeApplication.menu.removeItemAt(1);
+            NativeApplication.nativeApplication.menu.removeItemAt(1);
+            var _loc1_:NativeMenu = new NativeMenu();
+            var _loc2_:NativeMenuItem = new NativeMenuItem("保存");
+            _loc1_.addItem(_loc2_);
+            NativeApplication.nativeApplication.menu.addSubmenu(_loc1_,"文件");
+            var _loc3_:NativeMenu = new NativeMenu();
+            _loc3_.addItem(new NativeMenuItem("版本信息"));
+            NativeApplication.nativeApplication.menu.addSubmenu(_loc3_,"关于");
+         } //
          var _loc4_:String = App.getValue("defalutProject") as String;
          this.openProjectFormPath(_loc4_);
-         this.addEventListener(Event.ADDED_TO_STAGE,this.onAdded);
+         // this.addEventListener(Event.ADDED_TO_STAGE,this.onAdded);
          this.nativeWindow.title += " [" + new ApplicationUpdaterUI().currentVersion + "]";
       }
       

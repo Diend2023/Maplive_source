@@ -36,6 +36,8 @@ package views
    
    public class ConfirmAlert extends Panel
    {
+
+      use namespace mx_internal; //
       
       public static const ENTER:String = "c_enter";
       
@@ -43,7 +45,8 @@ package views
       
       public static const NO:String = "c_no";
       
-      private static var _skinParts:Object = {
+      // private static var _skinParts:Object = {
+      private var _skinParts:Object = { //
          "contentGroup":false,
          "titleDisplay":false,
          "controlBarGroup":false

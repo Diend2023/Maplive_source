@@ -47,8 +47,11 @@ package views.attribute
    
    public class FrameAttribute extends RefAttribute
    {
+
+      use namespace mx_internal; //
       
-      private static var _skinParts:Object = {"contentGroup":false};
+      // private static var _skinParts:Object = {"contentGroup":false};
+      private var _skinParts:Object = {"contentGroup":false}; //
       
       private var _1267104585cardFrameLabel:NumericStepper;
       

@@ -9,7 +9,8 @@ package views
    public class TabBar extends spark.components.TabBar
    {
       
-      private static var _skinParts:Object = {"dataGroup":false};
+      // private static var _skinParts:Object = {"dataGroup":false};
+      private var _skinParts:Object = {"dataGroup":false}; //
       
       public function TabBar()
       {

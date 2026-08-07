@@ -22,6 +22,8 @@ package skins
    public class TextAreaSkin extends SparkSkin implements IStateClient2
    {
       
+      use namespace mx_internal; //
+      
       private static const exclusions:Array = ["background","scroller","promptDisplay","border"];
       
       private static const exclusions_4_0:Array = ["background","scroller","promptDisplay"];

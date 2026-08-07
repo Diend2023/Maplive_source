@@ -17,6 +17,8 @@ package button
    
    public class ButtonBarBase extends ItemRenderer
    {
+
+      use namespace mx_internal; //
       
       public static const CLOSE:String = "close_event";
       

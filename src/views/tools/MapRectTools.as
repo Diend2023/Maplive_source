@@ -49,7 +49,8 @@ package views.tools
       
       private static var _watcherSetupUtil:IWatcherSetupUtil2;
       
-      private static var _skinParts:Object = {"contentGroup":false};
+      // private static var _skinParts:Object = {"contentGroup":false};
+      private var _skinParts:Object = {"contentGroup":false}; //
       
       public var _MapRectTools_TabBar1:TabBar;
       

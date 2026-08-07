@@ -53,7 +53,8 @@ package views
       
       public static var _findTag:String = "";
       
-      private static var _skinParts:Object = {
+      // private static var _skinParts:Object = {
+      private var _skinParts:Object = { //
          "contentGroup":false,
          "titleDisplay":false,
          "controlBarGroup":false

@@ -33,6 +33,8 @@ package views.observe.map
    
    public class ImageItem extends ItemRenderer
    {
+
+      use namespace mx_internal; //
       
       private var _100313435image:Image;
       

@@ -45,7 +45,8 @@ package views.observe.map
       
       private static var _watcherSetupUtil:IWatcherSetupUtil2;
       
-      private static var _skinParts:Object = {
+      // private static var _skinParts:Object = {
+      private var _skinParts:Object = { //
          "contentGroup":false,
          "titleDisplay":false,
          "controlBarGroup":false

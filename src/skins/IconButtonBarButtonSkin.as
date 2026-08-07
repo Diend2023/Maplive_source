@@ -21,6 +21,8 @@ package skins
    
    public class IconButtonBarButtonSkin extends SparkButtonSkin implements IStateClient2
    {
+
+      use namespace mx_internal; //
       
       private static const exclusions:Array = ["labelDisplay"];
       

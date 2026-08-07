@@ -35,6 +35,8 @@ package views.observe.text
    
    public class TimeLine extends Group
    {
+
+      use namespace mx_internal; //
       
       private var _544640655frameDarw:UIComponent;
       

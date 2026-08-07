@@ -7,6 +7,8 @@ package skins
    
    public class TabBarSkinInnerClass0 extends ButtonBarBase
    {
+
+      use namespace mx_internal; //
       
       private var _88844982outerDocument:TabBarSkin;
       

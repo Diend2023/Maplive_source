@@ -34,6 +34,8 @@ package views.observe.map
    
    public class LayerItem extends ItemRenderer
    {
+
+      use namespace mx_internal; //
       
       private var _1544481607showvisibleBtn:Button;
       
