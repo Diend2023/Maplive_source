@@ -1,0 +1,21 @@
+{
+	"config": "air",
+	"compilerOptions": {
+		"source-path": [
+			"src"
+		],
+		"library-path": [
+			"libs"
+		],
+		"output": "bin/map.swf",
+		"default-background-color": "#504f5e",
+		"default-frame-rate": 60,
+		"default-size": {
+			"width": 500,
+			"height": 500
+		},
+		"swf-version": 30
+	},
+	"application": "src/map-app.xml",
+	"mainClass": "_Maplive_mx_managers_SystemManager"
+}
