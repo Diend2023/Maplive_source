@@ -1,42 +1,73 @@
 package dragonBones.objects
 {
-   import dragonBones.core.BaseObject;
-   
-   public final class CustomData extends BaseObject
-   {
-      
-      public const ints:Vector.<Number> = new Vector.<Number>();
-      
-      public const floats:Vector.<Number> = new Vector.<Number>();
-      
-      public const strings:Vector.<String> = new Vector.<String>();
-      
-      public function CustomData()
-      {
-         super(this);
-      }
-      
-      override protected function _onClear() : void
-      {
-         this.ints.length = 0;
-         this.floats.length = 0;
-         this.strings.length = 0;
-      }
-      
-      public function getInt(param1:Number = 0) : Number
-      {
-         return param1 >= 0 && param1 < this.ints.length ? this.ints[param1] : 0;
-      }
-      
-      public function getFloat(param1:Number = 0) : Number
-      {
-         return param1 >= 0 && param1 < this.floats.length ? this.floats[param1] : 0;
-      }
-      
-      public function getString(param1:Number = 0) : String
-      {
-         return param1 >= 0 && param1 < this.strings.length ? this.strings[param1] : null;
-      }
-   }
+	import dragonBones.core.BaseObject;
+	
+	/**
+	 * @language zh_CN
+	 * 自定义数据。
+	 * @version DragonBones 5.0
+	 */
+	public final class CustomData extends BaseObject
+	{
+		/**
+		 * @language zh_CN
+		 * 自定义整数。
+		 * @version DragonBones 5.0
+		 */
+		public const ints: Vector.<Number> = new Vector.<Number>();
+		/**
+		 * @language zh_CN
+		 * 自定义浮点数。
+		 * @version DragonBones 5.0
+		 */
+		public const floats: Vector.<Number> = new Vector.<Number>();
+		/**
+		 * @language zh_CN
+		 * 自定义字符串。
+		 * @version DragonBones 5.0
+		 */
+		public const strings: Vector.<String> = new Vector.<String>();
+		/**
+		 * @private
+		 */
+		public function CustomData()
+		{
+			super(this);
+		}
+		/**
+		 * @private
+		 */
+		override protected function _onClear(): void {
+			ints.length = 0;
+			floats.length = 0;
+			strings.length = 0;
+		}
+		/**
+		 * @language zh_CN
+		 * 获取自定义整数。
+		 * @version DragonBones 5.0
+		 */
+		public function getInt(index: Number = 0): Number 
+		{
+			return index >= 0 && index < ints.length ? ints[index] : 0;
+		}
+		/**
+		 * @language zh_CN
+		 * 获取自定义浮点数。
+		 * @version DragonBones 5.0
+		 */
+		public function getFloat(index: Number = 0): Number 
+		{
+			return index >= 0 && index < floats.length ? floats[index] : 0;
+		}
+		/**
+		 * @language zh_CN
+		 * 获取自定义字符串。
+		 * @version DragonBones 5.0
+		 */
+		public function getString(index: Number = 0): String 
+		{
+			return index >= 0 && index < strings.length ? strings[index] : null;
+		}
+	}
 }
-

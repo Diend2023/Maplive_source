@@ -1,102 +1,91 @@
 package dragonBones.objects
 {
-   import dragonBones.core.DragonBones;
-   import flash.geom.Point;
-   
-   public class TweenFrameData extends FrameData
-   {
-      
-      public var tweenEasing:Number;
-      
-      public var curve:Vector.<Number>;
-      
-      public function TweenFrameData(param1:TweenFrameData)
-      {
-         super(this);
-         if(param1 != this)
-         {
-            throw new Error(DragonBones.ABSTRACT_CLASS_ERROR);
-         }
-      }
-      
-      private static function _getCurvePoint(param1:Number, param2:Number, param3:Number, param4:Number, param5:Number, param6:Number, param7:Number, param8:Number, param9:Number, param10:Point) : void
-      {
-         var _loc11_:Number = NaN;
-         var _loc12_:Number = NaN;
-         var _loc13_:Number = NaN;
-         _loc11_ = 1 - param9;
-         _loc12_ = _loc11_ * _loc11_;
-         _loc13_ = param9 * param9;
-         var _loc14_:Number = _loc11_ * _loc12_;
-         var _loc15_:Number = 3 * param9 * _loc12_;
-         var _loc16_:Number = 3 * _loc11_ * _loc13_;
-         var _loc17_:Number = param9 * _loc13_;
-         param10.x = _loc14_ * param1 + _loc15_ * param3 + _loc16_ * param5 + _loc17_ * param7;
-         param10.y = _loc14_ * param2 + _loc15_ * param4 + _loc16_ * param6 + _loc17_ * param8;
-      }
-      
-      public static function samplingEasingCurve(param1:Array, param2:Vector.<Number>) : void
-      {
-         var _loc8_:Number = NaN;
-         var _loc9_:Boolean = false;
-         var _loc10_:Number = NaN;
-         var _loc11_:Number = NaN;
-         var _loc12_:Number = NaN;
-         var _loc13_:Number = NaN;
-         var _loc14_:Number = NaN;
-         var _loc15_:Number = NaN;
-         var _loc16_:Number = NaN;
-         var _loc17_:Number = NaN;
-         var _loc18_:Number = NaN;
-         var _loc19_:Number = NaN;
-         var _loc20_:Number = NaN;
-         var _loc3_:uint = param1.length;
-         var _loc4_:Point = new Point();
-         var _loc5_:int = -2;
-         var _loc6_:uint = 0;
-         var _loc7_:uint = param2.length;
-         while(_loc6_ < _loc7_)
-         {
-            _loc8_ = (_loc6_ + 1) / (_loc7_ + 1);
-            while((_loc5_ + 6 < _loc3_ ? param1[_loc5_ + 6] : 1) < _loc8_)
-            {
-               _loc5_ += 6;
-            }
-            _loc9_ = _loc5_ >= 0 && _loc5_ + 6 < _loc3_;
-            _loc10_ = _loc9_ ? Number(param1[_loc5_]) : 0;
-            _loc11_ = _loc9_ ? Number(param1[_loc5_ + 1]) : 0;
-            _loc12_ = Number(param1[_loc5_ + 2]);
-            _loc13_ = Number(param1[_loc5_ + 3]);
-            _loc14_ = Number(param1[_loc5_ + 4]);
-            _loc15_ = Number(param1[_loc5_ + 5]);
-            _loc16_ = _loc9_ ? Number(param1[_loc5_ + 6]) : 1;
-            _loc17_ = _loc9_ ? Number(param1[_loc5_ + 7]) : 1;
-            _loc18_ = 0;
-            _loc19_ = 1;
-            while(_loc19_ - _loc18_ > 0.01)
-            {
-               _loc20_ = (_loc19_ + _loc18_) / 2;
-               _getCurvePoint(_loc10_,_loc11_,_loc12_,_loc13_,_loc14_,_loc15_,_loc16_,_loc17_,_loc20_,_loc4_);
-               if(_loc8_ - _loc4_.x > 0)
-               {
-                  _loc18_ = _loc20_;
-               }
-               else
-               {
-                  _loc19_ = _loc20_;
-               }
-            }
-            param2[_loc6_] = _loc4_.y;
-            _loc6_++;
-         }
-      }
-      
-      override protected function _onClear() : void
-      {
-         super._onClear();
-         this.tweenEasing = 0;
-         this.curve = null;
-      }
-   }
+	import flash.geom.Point;
+	
+	import dragonBones.core.DragonBones;
+	
+	/**
+	 * @private
+	 */
+	public class TweenFrameData extends FrameData
+	{
+		private static function _getCurvePoint(x1: Number, y1: Number, x2: Number, y2: Number, x3: Number, y3: Number, x4: Number, y4: Number, t: Number, result: Point): void
+		{
+			const l_t:Number = 1 - t;
+			const powA:Number = l_t * l_t;
+			const powB:Number = t * t;
+			const kA:Number = l_t * powA;
+			const kB:Number = 3.0 * t * powA;
+			const kC:Number = 3.0 * l_t * powB;
+			const kD:Number = t * powB;
+			
+			result.x = kA * x1 + kB * x2 + kC * x3 + kD * x4;
+			result.y = kA * y1 + kB * y2 + kC * y3 + kD * y4;
+		}
+		
+		public static function samplingEasingCurve(curve:Array, samples:Vector.<Number>): void
+		{
+			const curveCount:uint = curve.length;
+			const result:Point = new Point();
+			
+			var stepIndex:int = -2;
+			for (var i:uint = 0, l:uint = samples.length; i < l; ++i) 
+			{
+				var t:Number = (i + 1) / (l + 1);
+				while ((stepIndex + 6 < curveCount ? curve[stepIndex + 6] : 1) < t) // stepIndex + 3 * 2
+				{
+					stepIndex += 6;
+				}
+				
+				const isInCurve:Boolean = stepIndex >= 0 && stepIndex + 6 < curveCount;
+				const x1:Number = isInCurve ? curve[stepIndex] : 0.0;
+				const y1:Number = isInCurve ? curve[stepIndex + 1] : 0.0;
+				const x2:Number = curve[stepIndex + 2];
+				const y2:Number = curve[stepIndex + 3];
+				const x3:Number = curve[stepIndex + 4];
+				const y3:Number = curve[stepIndex + 5];
+				const x4:Number = isInCurve ? curve[stepIndex + 6] : 1.0;
+				const y4:Number = isInCurve ? curve[stepIndex + 7] : 1.0;
+				
+				var lower:Number = 0.0;
+				var higher:Number = 1.0;
+				while (higher - lower > 0.01) 
+				{
+					const percentage:Number = (higher + lower) / 2.0;
+					_getCurvePoint(x1, y1, x2, y2, x3, y3, x4, y4, percentage, result);
+					if (t - result.x > 0.0) 
+					{
+						lower = percentage;
+					} 
+					else 
+					{
+						higher = percentage;
+					}
+				}
+				
+				samples[i] = result.y;
+			}
+		}
+		
+		public var tweenEasing:Number;
+		public var curve:Vector.<Number>;
+		
+		public function TweenFrameData(self:TweenFrameData)
+		{
+			super(this);
+			
+			if (self != this)
+			{
+				throw new Error(DragonBones.ABSTRACT_CLASS_ERROR);
+			}
+		}
+		
+		override protected function _onClear():void
+		{
+			super._onClear();
+			
+			tweenEasing = 0.0;
+			curve = null;
+		}
+	}
 }
-

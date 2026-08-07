@@ -1,183 +1,266 @@
 package dragonBones.geom
 {
-   import flash.geom.Matrix;
-   import flash.geom.Point;
-   
-   public final class Transform
-   {
-      
-      public var x:Number = 0;
-      
-      public var y:Number = 0;
-      
-      public var skewX:Number = 0;
-      
-      public var skewY:Number = 0;
-      
-      public var scaleX:Number = 1;
-      
-      public var scaleY:Number = 1;
-      
-      public function Transform()
-      {
-         super();
-      }
-      
-      public static function normalizeRadian(param1:Number) : Number
-      {
-         param1 = (param1 + Math.PI) % (Math.PI * 2);
-         return param1 + (param1 > 0 ? -Math.PI : Math.PI);
-      }
-      
-      public static function transformPoint(param1:Matrix, param2:Number, param3:Number, param4:Point, param5:Boolean = false) : void
-      {
-         param4.x = param1.a * param2 + param1.c * param3;
-         param4.y = param1.b * param2 + param1.d * param3;
-         if(!param5)
-         {
-            param4.x += param1.tx;
-            param4.y += param1.ty;
-         }
-      }
-      
-      public function toString() : String
-      {
-         return "[object dragonBones.geom.Transform] x:" + this.x + " y:" + this.y + " skewX:" + this.skewX * 180 / Math.PI + " skewY:" + this.skewY * 180 / Math.PI + " scaleX:" + this.scaleX + " scaleY:" + this.scaleY;
-      }
-      
-      final public function copyFrom(param1:Transform) : Transform
-      {
-         this.x = param1.x;
-         this.y = param1.y;
-         this.skewX = param1.skewX;
-         this.skewY = param1.skewY;
-         this.scaleX = param1.scaleX;
-         this.scaleY = param1.scaleY;
-         return this;
-      }
-      
-      final public function identity() : Transform
-      {
-         this.x = this.y = this.skewX = this.skewY = 0;
-         this.scaleX = this.scaleY = 1;
-         return this;
-      }
-      
-      final public function add(param1:Transform) : Transform
-      {
-         this.x += param1.x;
-         this.y += param1.y;
-         this.skewX += param1.skewX;
-         this.skewY += param1.skewY;
-         this.scaleX *= param1.scaleX;
-         this.scaleY *= param1.scaleY;
-         return this;
-      }
-      
-      final public function minus(param1:Transform) : Transform
-      {
-         this.x -= param1.x;
-         this.y -= param1.y;
-         this.skewX = normalizeRadian(this.skewX - param1.skewX);
-         this.skewY = normalizeRadian(this.skewY - param1.skewY);
-         this.scaleX /= param1.scaleX;
-         this.scaleY /= param1.scaleY;
-         return this;
-      }
-      
-      final public function fromMatrix(param1:Matrix) : Transform
-      {
-         var _loc2_:Number = Math.PI * 0.25;
-         var _loc3_:Number = this.scaleX;
-         var _loc4_:Number = this.scaleY;
-         this.x = param1.tx;
-         this.y = param1.ty;
-         this.skewX = Math.atan(-param1.c / param1.d);
-         this.skewY = Math.atan(param1.b / param1.a);
-         if(this.skewX !== this.skewX)
-         {
-            this.skewX = 0;
-         }
-         if(this.skewY !== this.skewY)
-         {
-            this.skewY = 0;
-         }
-         if(this.skewX > -_loc2_ && this.skewX < _loc2_)
-         {
-            this.scaleY = param1.d / Math.cos(this.skewX);
-         }
-         else
-         {
-            this.scaleY = -param1.c / Math.sin(this.skewX);
-         }
-         if(this.skewY > -_loc2_ && this.skewY < _loc2_)
-         {
-            this.scaleX = param1.a / Math.cos(this.skewY);
-         }
-         else
-         {
-            this.scaleX = param1.b / Math.sin(this.skewY);
-         }
-         if(_loc3_ >= 0 && this.scaleX < 0)
-         {
-            this.scaleX = -this.scaleX;
-            this.skewY -= Math.PI;
-         }
-         if(_loc4_ >= 0 && this.scaleY < 0)
-         {
-            this.scaleY = -this.scaleY;
-            this.skewX -= Math.PI;
-         }
-         return this;
-      }
-      
-      final public function toMatrix(param1:Matrix) : Transform
-      {
-         if(this.skewX !== 0 || this.skewY !== 0)
-         {
-            param1.a = Math.cos(this.skewY);
-            param1.b = Math.sin(this.skewY);
-            if(this.skewX === this.skewY)
-            {
-               param1.c = -param1.b;
-               param1.d = param1.a;
-            }
-            else
-            {
-               param1.c = -Math.sin(this.skewX);
-               param1.d = Math.cos(this.skewX);
-            }
-            if(this.scaleX !== 1 || this.scaleY !== 1)
-            {
-               param1.a *= this.scaleX;
-               param1.b *= this.scaleX;
-               param1.c *= this.scaleY;
-               param1.d *= this.scaleY;
-            }
-         }
-         else
-         {
-            param1.a = this.scaleX;
-            param1.b = 0;
-            param1.c = 0;
-            param1.d = this.scaleY;
-         }
-         param1.tx = this.x;
-         param1.ty = this.y;
-         return this;
-      }
-      
-      final public function get rotation() : Number
-      {
-         return this.skewY;
-      }
-      
-      final public function set rotation(param1:Number) : void
-      {
-         var _loc2_:Number = param1 - this.skewY;
-         this.skewX += _loc2_;
-         this.skewY += _loc2_;
-      }
-   }
+	import flash.geom.Matrix;
+	import flash.geom.Point;
+	
+	/**
+	 * @language zh_CN
+	 * 2D 变换。
+	 * @version DragonBones 3.0
+	 */
+	public final class Transform
+	{
+		/**
+		 * @private
+		 */
+		public static function normalizeRadian(value:Number):Number
+		{
+			value = (value + Math.PI) % (Math.PI * 2.0);
+			value += value > 0.0? -Math.PI: Math.PI;
+			
+			return value;
+		}
+		/**
+		 * @private
+		 */
+		public static function transformPoint(matrix:Matrix, x:Number, y:Number, result:Point, delta:Boolean = false):void
+		{
+			result.x = matrix.a * x + matrix.c * y;
+			result.y = matrix.b * x + matrix.d * y;
+			
+			if (!delta)
+			{
+				result.x += matrix.tx;
+				result.y += matrix.ty;
+			}
+		}
+		/**
+		 * @language zh_CN
+		 * 水平位移。
+		 * @version DragonBones 3.0
+		 */
+		public var x:Number = 0.0;
+		/**
+		 * @language zh_CN
+		 * 垂直位移。
+		 * @version DragonBones 3.0
+		 */
+		public var y:Number = 0.0;
+		/**
+		 * @language zh_CN
+		 * 水平倾斜。 (以弧度为单位)
+		 * @version DragonBones 3.0
+		 */
+		public var skewX:Number = 0.0;
+		/**
+		 * @language zh_CN
+		 * 垂直倾斜。 (以弧度为单位)
+		 * @version DragonBones 3.0
+		 */
+		public var skewY:Number = 0.0;
+		/**
+		 * @language zh_CN
+		 * 水平缩放。
+		 * @version DragonBones 3.0
+		 */
+		public var scaleX:Number = 1.0;
+		/**
+		 * @language zh_CN
+		 * 垂直缩放。
+		 * @version DragonBones 3.0
+		 */
+		public var scaleY:Number = 1.0;
+		/**
+		 * @private
+		 */
+		public function Transform()
+		{
+		}
+		/**
+		 * @private
+		 */
+		public function toString():String 
+		{
+			return "[object dragonBones.geom.Transform] x:" + x + " y:" + y + " skewX:" + skewX * 180 / Math.PI + " skewY:" + skewY * 180 / Math.PI + " scaleX:" + scaleX + " scaleY:" + scaleY;
+		}
+		/**
+		 * @private
+		 */
+		[inline]
+		final public function copyFrom(value:Transform):Transform
+		{
+			x = value.x;
+			y = value.y;
+			skewX = value.skewX;
+			skewY = value.skewY;
+			scaleX = value.scaleX;
+			scaleY = value.scaleY;
+			
+			return this;
+		}
+		/**
+		 * @private
+		 */
+		[inline]
+		final public function identity():Transform
+		{
+			x = y = skewX = skewY = 0.0;
+			scaleX = scaleY = 1.0;
+			
+			return this;
+		}
+		/**
+		 * @private
+		 */
+		[inline]
+		final public function add(value:Transform):Transform
+		{
+			x += value.x;
+			y += value.y;
+			skewX += value.skewX;
+			skewY += value.skewY;
+			scaleX *= value.scaleX;
+			scaleY *= value.scaleY;
+			
+			return this;
+		}
+		/**
+		 * @private
+		 */
+		[inline]
+		final public function minus(value:Transform):Transform
+		{
+			x -= value.x;
+			y -= value.y;
+			skewX = normalizeRadian(skewX - value.skewX);
+			skewY = normalizeRadian(skewY - value.skewY);
+			scaleX /= value.scaleX;
+			scaleY /= value.scaleY;
+			
+			return this;
+		}
+		/**
+		 * @private
+		 */
+		[inline]
+		final public function fromMatrix(matrix:Matrix):Transform
+		{
+			const PI_Q:Number = Math.PI * 0.25;
+			
+			const backupScaleX:Number = scaleX, backupScaleY:Number = scaleY;
+			
+			x = matrix.tx;
+			y = matrix.ty;
+			
+			//skewX = Math.atan2(-matrix.c, matrix.d);
+			//skewY = Math.atan2(matrix.b, matrix.a);
+			skewX = Math.atan(-matrix.c / matrix.d);
+			skewY = Math.atan(matrix.b / matrix.a);
+			if (skewX !== skewX) 
+			{
+				skewX = 0.0;
+			}
+			
+			if (skewY !== skewY) 
+			{
+				skewY = 0.0;
+			}
+			
+			// scaleY = (skewX > -PI_Q && skewX < PI_Q)? matrix.d / Math.cos(skewX): -matrix.c / Math.sin(skewX);
+			if (skewX > -PI_Q && skewX < PI_Q)
+			{
+				scaleY = matrix.d / Math.cos(skewX);
+			}
+			else
+			{
+				scaleY = -matrix.c / Math.sin(skewX);
+			}
+			
+			// scaleX = (skewY > -PI_Q && skewY < PI_Q)? matrix.a / Math.cos(skewY):  matrix.b / Math.sin(skewY);
+			if (skewY > -PI_Q && skewY < PI_Q)
+			{
+				scaleX = matrix.a / Math.cos(skewY);
+			}
+			else
+			{
+				scaleX = matrix.b / Math.sin(skewY);
+			}
+			
+			if (backupScaleX >= 0.0 && scaleX < 0.0)
+			{
+				scaleX = -scaleX;
+				skewY = skewY - Math.PI;
+			}
+			
+			if (backupScaleY >= 0.0 && scaleY < 0.0)
+			{
+				scaleY = -scaleY;
+				skewX = skewX - Math.PI;
+			}
+			
+			return this;
+		}
+		/**
+		 * @language zh_CN
+		 * 转换为矩阵。
+		 * @version DragonBones 3.0
+		 */
+		[inline]
+		final public function toMatrix(matrix:Matrix):Transform
+		{
+			if (skewX !== 0.0 || skewY !== 0.0) 
+			{
+				matrix.a = Math.cos(skewY);
+				matrix.b = Math.sin(skewY);
+				
+				if (skewX === skewY) 
+				{
+					matrix.c = -matrix.b;
+					matrix.d = matrix.a;
+				}
+				else 
+				{
+					matrix.c = -Math.sin(skewX);
+					matrix.d = Math.cos(skewX);
+				}
+				
+				if (scaleX !== 1.0 || scaleY !== 1.0) 
+				{
+					matrix.a *= scaleX;
+					matrix.b *= scaleX;
+					matrix.c *= scaleY;
+					matrix.d *= scaleY;
+				}
+			}
+			else 
+			{
+				matrix.a = scaleX;
+				matrix.b = 0.0;
+				matrix.c = 0.0;
+				matrix.d = scaleY;
+			}
+			
+			matrix.tx = x;
+			matrix.ty = y;
+			
+			return this;
+		}
+		/**
+		 * @language zh_CN
+		 * 旋转。 (以弧度为单位)
+		 * @version DragonBones 3.0
+		 */
+		[inline]
+		final public function get rotation():Number
+		{
+			return skewY;
+		}
+		[inline]
+		final public function set rotation(value:Number):void
+		{
+			const dValue:Number = value - skewY;
+			skewX += dValue;
+			skewY += dValue;
+		}
+	}
 }
-

@@ -1,15 +1,38 @@
 package dragonBones.events
 {
-   public interface IEventDispatcher
-   {
-      
-      function _dispatchEvent(param1:String, param2:EventObject) : void;
-      
-      function hasEvent(param1:String) : Boolean;
-      
-      function addEvent(param1:String, param2:Function) : void;
-      
-      function removeEvent(param1:String, param2:Function) : void;
-   }
+	/**
+	 * @language zh_CN
+	 * 事件接口。
+	 * @version DragonBones 4.5
+	 */
+	public interface IEventDispatcher
+	{
+		/**
+		 * @private
+		 */
+		function _dispatchEvent(type:String, value:EventObject):void;
+		/**
+		 * @language zh_CN
+		 * 是否包含指定类型的事件。
+		 * @param type 事件类型。
+		 * @version DragonBones 4.5
+		 */
+		function hasEvent(type:String):Boolean;
+		/**
+		 * @language zh_CN
+		 * 添加事件。
+		 * @param type 事件类型。
+		 * @param listener 事件回调。
+		 * @version DragonBones 4.5
+		 */
+		function addEvent(type:String, listener:Function):void;
+		/**
+		 * @language zh_CN
+		 * 移除事件。
+		 * @param type 事件类型。
+		 * @param listener 事件回调。
+		 * @version DragonBones 4.5
+		 */
+		function removeEvent(type:String, listener:Function):void;
+	}
 }
-

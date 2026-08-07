@@ -1,198 +1,215 @@
-package dragonBones.flash
+﻿package dragonBones.flash
 {
-   import dragonBones.Armature;
-   import dragonBones.Bone;
-   import dragonBones.Slot;
-   import dragonBones.animation.Animation;
-   import dragonBones.core.IArmatureDisplay;
-   import dragonBones.core.dragonBones_internal;
-   import dragonBones.enum.BoundingBoxType;
-   import dragonBones.events.EventObject;
-   import dragonBones.objects.BoundingBoxData;
-   import flash.display.Shape;
-   import flash.display.Sprite;
-   
-   use namespace dragonBones_internal;
-   
-   public class FlashArmatureDisplay extends Sprite implements IArmatureDisplay
-   {
-      
-      dragonBones_internal var _armature:Armature;
-      
-      private var _debugDrawer:Sprite;
-      
-      public function FlashArmatureDisplay()
-      {
-         super();
-      }
-      
-      public function _onClear() : void
-      {
-         this.dragonBones_internal::_armature = null;
-         this._debugDrawer = null;
-      }
-      
-      public function _dispatchEvent(param1:String, param2:EventObject) : void
-      {
-         var _loc3_:FlashEvent = new FlashEvent(param1,param2);
-         dispatchEvent(_loc3_);
-      }
-      
-      public function _debugDraw(param1:Boolean) : void
-      {
-         var _loc2_:Vector.<Bone> = null;
-         var _loc3_:uint = 0;
-         var _loc4_:uint = 0;
-         var _loc5_:Vector.<Slot> = null;
-         var _loc6_:Bone = null;
-         var _loc7_:Number = NaN;
-         var _loc8_:Number = NaN;
-         var _loc9_:Number = NaN;
-         var _loc10_:Number = NaN;
-         var _loc11_:Number = NaN;
-         var _loc12_:Slot = null;
-         var _loc13_:BoundingBoxData = null;
-         var _loc14_:Shape = null;
-         var _loc15_:Vector.<Number> = null;
-         var _loc16_:uint = 0;
-         var _loc17_:uint = 0;
-         if(param1)
-         {
-            if(!this._debugDrawer)
-            {
-               this._debugDrawer = new Sprite();
-            }
-            addChild(this._debugDrawer);
-            this._debugDrawer.graphics.clear();
-            _loc2_ = this.dragonBones_internal::_armature.getBones();
-            _loc3_ = 0;
-            _loc4_ = _loc2_.length;
-            while(_loc3_ < _loc4_)
-            {
-               _loc6_ = _loc2_[_loc3_];
-               _loc7_ = _loc6_.length;
-               _loc8_ = _loc6_.globalTransformMatrix.tx;
-               _loc9_ = _loc6_.globalTransformMatrix.ty;
-               _loc10_ = _loc8_ + _loc6_.globalTransformMatrix.a * _loc7_;
-               _loc11_ = _loc9_ + _loc6_.globalTransformMatrix.b * _loc7_;
-               this._debugDrawer.graphics.lineStyle(2,_loc6_.ik ? 16711680 : 65535,0.7);
-               this._debugDrawer.graphics.moveTo(_loc8_,_loc9_);
-               this._debugDrawer.graphics.lineTo(_loc10_,_loc11_);
-               this._debugDrawer.graphics.lineStyle(0,0,0);
-               this._debugDrawer.graphics.beginFill(65535,0.7);
-               this._debugDrawer.graphics.drawCircle(_loc8_,_loc9_,3);
-               this._debugDrawer.graphics.endFill();
-               _loc3_++;
-            }
-            _loc5_ = this.dragonBones_internal::_armature.getSlots();
-            _loc3_ = 0;
-            _loc4_ = _loc5_.length;
-            while(_loc3_ < _loc4_)
-            {
-               _loc12_ = _loc5_[_loc3_];
-               _loc13_ = _loc12_.boundingBoxData;
-               if(_loc13_)
-               {
-                  _loc14_ = this._debugDrawer.getChildByName(_loc12_.name) as Shape;
-                  if(!_loc14_)
-                  {
-                     _loc14_ = new Shape();
-                     _loc14_.name = _loc12_.name;
-                     this._debugDrawer.addChild(_loc14_);
-                  }
-                  _loc14_.graphics.clear();
-                  _loc14_.graphics.beginFill(_loc13_.color ? _loc13_.color : 16711935,0.3);
-                  switch(_loc13_.type)
-                  {
-                     case BoundingBoxType.Rectangle:
-                        _loc14_.graphics.drawRect(-_loc13_.width * 0.5,-_loc13_.height * 0.5,_loc13_.width,_loc13_.height);
-                        break;
-                     case BoundingBoxType.Ellipse:
-                        _loc14_.graphics.drawEllipse(-_loc13_.width * 0.5,-_loc13_.height * 0.5,_loc13_.width,_loc13_.height);
-                        break;
-                     case BoundingBoxType.Polygon:
-                        _loc15_ = _loc13_.vertices;
-                        _loc16_ = 0;
-                        _loc17_ = _loc13_.vertices.length;
-                        while(_loc16_ < _loc17_)
-                        {
-                           if(_loc16_ === 0)
-                           {
-                              _loc14_.graphics.moveTo(_loc15_[_loc16_],_loc15_[_loc16_ + 1]);
-                           }
-                           else
-                           {
-                              _loc14_.graphics.lineTo(_loc15_[_loc16_],_loc15_[_loc16_ + 1]);
-                           }
-                           _loc16_ += 2;
-                        }
-                  }
-                  _loc14_.graphics.endFill();
-                  _loc12_.dragonBones_internal::_updateTransformAndMatrix();
-                  _loc14_.transform.matrix = _loc12_.globalTransformMatrix;
-               }
-               else
-               {
-                  _loc14_ = this._debugDrawer.getChildByName(_loc12_.name) as Shape;
-                  if(_loc14_)
-                  {
-                     this._debugDrawer.removeChild(_loc14_);
-                  }
-               }
-               _loc3_++;
-            }
-         }
-         else if(Boolean(this._debugDrawer) && this._debugDrawer.parent === this)
-         {
-            removeChild(this._debugDrawer);
-         }
-      }
-      
-      public function dispose() : void
-      {
-         if(this.dragonBones_internal::_armature)
-         {
-            this.dragonBones_internal::_armature.dispose();
-            this.dragonBones_internal::_armature = null;
-         }
-      }
-      
-      public function hasEvent(param1:String) : Boolean
-      {
-         return hasEventListener(param1);
-      }
-      
-      public function addEvent(param1:String, param2:Function) : void
-      {
-         addEventListener(param1,param2);
-      }
-      
-      public function removeEvent(param1:String, param2:Function) : void
-      {
-         removeEventListener(param1,param2);
-      }
-      
-      public function get armature() : Armature
-      {
-         return this.dragonBones_internal::_armature;
-      }
-      
-      public function get animation() : Animation
-      {
-         return this.dragonBones_internal::_armature.animation;
-      }
-      
-      public function advanceTimeBySelf(param1:Boolean) : void
-      {
-         if(param1)
-         {
-            this.dragonBones_internal::_armature.clock = FlashFactory.dragonBones_internal::_clock;
-         }
-         else
-         {
-            this.dragonBones_internal::_armature.clock = null;
-         }
-      }
-   }
+	import flash.display.Shape;
+	import flash.display.Sprite;
+	
+	import dragonBones.Armature;
+	import dragonBones.Bone;
+	import dragonBones.Slot;
+	import dragonBones.animation.Animation;
+	import dragonBones.core.IArmatureDisplay;
+	import dragonBones.core.dragonBones_internal;
+	import dragonBones.enum.BoundingBoxType;
+	import dragonBones.events.EventObject;
+	import dragonBones.objects.BoundingBoxData;
+	
+	use namespace dragonBones_internal;
+	
+	/**
+	 * @inheritDoc
+	 */
+	public class FlashArmatureDisplay extends Sprite implements IArmatureDisplay
+	{
+		/**
+		 * @private
+		 */
+		dragonBones_internal var _armature:Armature;
+		
+		private var _debugDrawer:Sprite;
+		/**
+		 * @private
+		 */
+		public function FlashArmatureDisplay()
+		{
+			super();
+		}
+		/**
+		 * @private
+		 */
+		public function _onClear():void
+		{
+			_armature = null;
+			_debugDrawer = null;
+		}
+		/**
+		 * @private
+		 */
+		public function _dispatchEvent(type:String, eventObject:EventObject):void
+		{
+			const event:FlashEvent = new FlashEvent(type, eventObject);
+			dispatchEvent(event);
+		}
+		/**
+		 * @private
+		 */
+		public function _debugDraw(isEnabled:Boolean):void
+		{
+			if (isEnabled)
+			{
+				if (!_debugDrawer) 
+				{
+					_debugDrawer = new Sprite();
+				}
+				
+				addChild(_debugDrawer);
+				_debugDrawer.graphics.clear();
+				
+				const bones:Vector.<Bone> = _armature.getBones();
+				for (var i:uint = 0, l:uint = bones.length; i < l; ++i) 
+				{
+					const bone:Bone = bones[i];
+					const boneLength:Number = bone.length;
+					const startX:Number = bone.globalTransformMatrix.tx;
+					const startY:Number = bone.globalTransformMatrix.ty;
+					const endX:Number = startX + bone.globalTransformMatrix.a * boneLength;
+					const endY:Number = startY + bone.globalTransformMatrix.b * boneLength;
+					
+					_debugDrawer.graphics.lineStyle(2.0, bone.ik ? 0xFF0000 : 0x00FFFF, 0.7);
+					_debugDrawer.graphics.moveTo(startX, startY);
+					_debugDrawer.graphics.lineTo(endX, endY);
+					_debugDrawer.graphics.lineStyle(0.0, 0, 0);
+					_debugDrawer.graphics.beginFill(0x00FFFF, 0.7);
+					_debugDrawer.graphics.drawCircle(startX, startY, 3.0);
+					_debugDrawer.graphics.endFill();
+				}
+				
+				const slots:Vector.<Slot> = _armature.getSlots();
+				for (i = 0, l = slots.length; i < l; ++i) 
+				{
+					const slot:Slot = slots[i];
+					const boundingBoxData:BoundingBoxData = slot.boundingBoxData;
+					
+					if (boundingBoxData) 
+					{
+						var child:Shape = _debugDrawer.getChildByName(slot.name) as Shape;
+						if (!child) 
+						{
+							child = new Shape();
+							child.name = slot.name;
+							_debugDrawer.addChild(child);
+						}
+						
+						child.graphics.clear();
+						child.graphics.beginFill(boundingBoxData.color ? boundingBoxData.color : 0xFF00FF, 0.3);
+						
+						switch (boundingBoxData.type) 
+						{
+							case BoundingBoxType.Rectangle:
+								child.graphics.drawRect(-boundingBoxData.width * 0.5, -boundingBoxData.height * 0.5, boundingBoxData.width, boundingBoxData.height);
+								break;
+							
+							case BoundingBoxType.Ellipse:
+								child.graphics.drawEllipse(-boundingBoxData.width * 0.5, -boundingBoxData.height * 0.5, boundingBoxData.width, boundingBoxData.height);
+								break;
+							
+							case BoundingBoxType.Polygon:
+								const vertices:Vector.<Number> = boundingBoxData.vertices;
+								for (var iA:uint = 0, lA:uint = boundingBoxData.vertices.length; iA < lA; iA += 2) 
+								{
+									if (iA === 0) 
+									{
+										child.graphics.moveTo(vertices[iA], vertices[iA + 1]);
+									}
+									else 
+									{
+										child.graphics.lineTo(vertices[iA], vertices[iA + 1]);
+									}
+								}
+								break;
+							
+							default:
+							break;
+						}
+						
+						child.graphics.endFill();
+						slot._updateTransformAndMatrix();
+						child.transform.matrix = slot.globalTransformMatrix;
+					}
+					else
+					{
+						child = _debugDrawer.getChildByName(slot.name) as Shape;
+						if (child) 
+						{
+							_debugDrawer.removeChild(child);
+						}
+					}
+				}
+			}
+			else if (_debugDrawer && _debugDrawer.parent === this)
+			{
+				removeChild(_debugDrawer);
+			}
+		}
+		/**
+		 * @inheritDoc
+		 */
+		public function dispose():void
+		{
+			if (_armature)
+			{
+				_armature.dispose();
+				_armature = null;
+			}
+		}
+		/**
+		 * @inheritDoc
+		 */
+		public function hasEvent(type:String):Boolean
+		{
+			return hasEventListener(type);
+		}
+		/**
+		 * @inheritDoc
+		 */
+		public function addEvent(type:String, listener:Function):void
+		{
+			addEventListener(type, listener);
+		}
+		/**
+		 * @inheritDoc
+		 */
+		public function removeEvent(type:String, listener:Function):void
+		{
+			removeEventListener(type, listener);
+		}
+		/**
+		 * @inheritDoc
+		 */
+		public function get armature():Armature
+		{
+			return _armature;
+		}
+		/**
+		 * @inheritDoc
+		 */
+		public function get animation():Animation
+		{
+			return _armature.animation;
+		}
+		
+		/**
+		 * @deprecated
+		 */
+		public function advanceTimeBySelf(on:Boolean):void
+		{
+			if (on)
+			{
+				_armature.clock = FlashFactory._clock;
+			} 
+			else 
+			{
+				_armature.clock = null;
+			}
+		}
+	}
 }
-

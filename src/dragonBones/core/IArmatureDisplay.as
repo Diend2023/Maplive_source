@@ -1,9 +1,10 @@
 package dragonBones.core
 {
-   public interface IArmatureDisplay extends IArmatureProxy
-   {
-      
-      
-   }
+	/**
+	 * @deprecated
+	 * @see dragonBones.core.IArmatureProxy
+	 */
+	public interface IArmatureDisplay extends IArmatureProxy
+	{
+	}
 }
-

@@ -1,217 +1,276 @@
-package dragonBones.flash
+﻿package dragonBones.flash
 {
-   import dragonBones.Armature;
-   import dragonBones.Slot;
-   import dragonBones.animation.WorldClock;
-   import dragonBones.core.BaseObject;
-   import dragonBones.core.dragonBones_internal;
-   import dragonBones.enum.DisplayType;
-   import dragonBones.factories.BaseFactory;
-   import dragonBones.factories.BuildArmaturePackage;
-   import dragonBones.objects.ActionData;
-   import dragonBones.objects.DisplayData;
-   import dragonBones.objects.SkinSlotData;
-   import dragonBones.objects.SlotData;
-   import dragonBones.parsers.DataParser;
-   import dragonBones.textures.TextureAtlasData;
-   import flash.display.BitmapData;
-   import flash.display.Shape;
-   import flash.events.Event;
-   import flash.geom.Matrix;
-   import flash.utils.getTimer;
-   
-   use namespace dragonBones_internal;
-   
-   public class FlashFactory extends BaseFactory
-   {
-      
-      protected static const _eventManager:FlashArmatureDisplay = new FlashArmatureDisplay();
-      
-      dragonBones_internal static const _clock:WorldClock = new WorldClock();
-      
-      public static const factory:FlashFactory = new FlashFactory();
-      
-      public function FlashFactory(param1:DataParser = null)
-      {
-         super(this,param1);
-      }
-      
-      protected static function _clockHandler(param1:Event) : void
-      {
-         var _loc2_:Number = NaN;
-         _loc2_ = getTimer() * 0.001;
-         var _loc3_:Number = _loc2_ - dragonBones_internal::_clock.time;
-         dragonBones_internal::_clock.advanceTime(_loc3_);
-         dragonBones_internal::_clock.time = _loc2_;
-      }
-      
-      override protected function _generateTextureAtlasData(param1:TextureAtlasData, param2:Object) : TextureAtlasData
-      {
-         if(param1)
-         {
-            if(param2 is BitmapData)
-            {
-               (param1 as FlashTextureAtlasData).texture = param2 as BitmapData;
-            }
-         }
-         else
-         {
-            param1 = BaseObject.borrowObject(FlashTextureAtlasData) as FlashTextureAtlasData;
-         }
-         return param1;
-      }
-      
-      override protected function _generateArmature(param1:BuildArmaturePackage) : Armature
-      {
-         if(!_eventManager.hasEventListener(Event.ENTER_FRAME))
-         {
-            dragonBones_internal::_clock.time = getTimer() * 0.001;
-            _eventManager.addEventListener(Event.ENTER_FRAME,_clockHandler,false,-999999);
-         }
-         var _loc2_:Armature = BaseObject.borrowObject(Armature) as Armature;
-         var _loc3_:FlashArmatureDisplay = new FlashArmatureDisplay();
-         _loc3_.dragonBones_internal::_armature = _loc2_;
-         _loc2_._init(param1.armature,param1.skin,_loc3_,_loc3_,_eventManager);
-         return _loc2_;
-      }
-      
-      override protected function _generateSlot(param1:BuildArmaturePackage, param2:SkinSlotData, param3:Armature) : Slot
-      {
-         var _loc10_:DisplayData = null;
-         var _loc11_:Armature = null;
-         var _loc12_:Vector.<ActionData> = null;
-         var _loc13_:ActionData = null;
-         var _loc4_:FlashSlot = BaseObject.borrowObject(FlashSlot) as FlashSlot;
-         var _loc5_:SlotData = param2.slot;
-         var _loc6_:Vector.<Object> = new Vector.<Object>(param2.displays.length,true);
-         var _loc7_:Shape = new Shape();
-         _loc4_.dragonBones_internal::_init(param2,_loc7_,_loc7_);
-         var _loc8_:uint = 0;
-         var _loc9_:uint = param2.displays.length;
-         while(_loc8_ < _loc9_)
-         {
-            _loc10_ = param2.displays[_loc8_];
-            switch(_loc10_.type)
-            {
-               case DisplayType.Image:
-                  if(!_loc10_.texture)
-                  {
-                     _loc10_.texture = _getTextureData(param1.dataName,_loc10_.path);
-                  }
-                  if(param1.textureAtlasName)
-                  {
-                     _loc4_.dragonBones_internal::_textureDatas[_loc8_] = _getTextureData(param1.textureAtlasName,_loc10_.path);
-                  }
-                  _loc6_[_loc8_] = _loc4_.rawDisplay;
-                  break;
-               case DisplayType.Mesh:
-                  if(!_loc10_.texture)
-                  {
-                     _loc10_.texture = _getTextureData(param1.dataName,_loc10_.path);
-                  }
-                  if(param1.textureAtlasName)
-                  {
-                     _loc4_.dragonBones_internal::_textureDatas[_loc8_] = _getTextureData(param1.textureAtlasName,_loc10_.path);
-                  }
-                  _loc6_[_loc8_] = _loc4_.meshDisplay;
-                  break;
-               case DisplayType.Armature:
-                  _loc11_ = buildArmature(_loc10_.path,param1.dataName,null,param1.textureAtlasName);
-                  if(_loc11_)
-                  {
-                     if(!_loc11_.inheritAnimation)
-                     {
-                        _loc12_ = _loc5_.actions.length > 0 ? _loc5_.actions : _loc11_.armatureData.actions;
-                        if(_loc12_.length > 0)
-                        {
-                           for each(_loc13_ in _loc12_)
-                           {
-                              _loc11_.dragonBones_internal::_bufferAction(_loc13_);
-                           }
-                        }
-                        else
-                        {
-                           _loc11_.animation.play();
-                        }
-                     }
-                     _loc10_.armature = _loc11_.armatureData;
-                  }
-                  _loc6_[_loc8_] = _loc11_;
-                  break;
-               default:
-                  _loc6_[_loc8_] = null;
-            }
-            _loc8_++;
-         }
-         _loc4_.dragonBones_internal::_setDisplayList(_loc6_);
-         return _loc4_;
-      }
-      
-      public function buildArmatureDisplay(param1:String, param2:String = null, param3:String = null, param4:String = null) : FlashArmatureDisplay
-      {
-         var _loc5_:Armature = buildArmature(param1,param2,param3,param4);
-         if(_loc5_)
-         {
-            dragonBones_internal::_clock.add(_loc5_);
-            return _loc5_.display as FlashArmatureDisplay;
-         }
-         return null;
-      }
-      
-      public function getTextureDisplay(param1:String, param2:String = null) : Shape
-      {
-         var _loc4_:Number = NaN;
-         var _loc5_:Number = NaN;
-         var _loc6_:Number = NaN;
-         var _loc7_:Matrix = null;
-         var _loc8_:Shape = null;
-         var _loc3_:FlashTextureData = _getTextureData(param2,param1) as FlashTextureData;
-         if(_loc3_)
-         {
-            _loc4_ = 0;
-            _loc5_ = 0;
-            if(_loc3_.rotated)
-            {
-               _loc4_ = _loc3_.region.height;
-               _loc5_ = _loc3_.region.width;
-            }
-            else
-            {
-               _loc5_ = _loc3_.region.height;
-               _loc4_ = _loc3_.region.width;
-            }
-            _loc6_ = 1 / _loc3_.parent.scale;
-            _loc7_ = new Matrix();
-            if(_loc3_.rotated)
-            {
-               _loc7_.a = 0;
-               _loc7_.b = -_loc6_;
-               _loc7_.c = _loc6_;
-               _loc7_.d = 0;
-               _loc7_.tx = -_loc3_.region.y;
-               _loc7_.ty = _loc3_.region.x + _loc5_;
-            }
-            else
-            {
-               _loc7_.a = _loc6_;
-               _loc7_.b = 0;
-               _loc7_.c = 0;
-               _loc7_.d = _loc6_;
-               _loc7_.tx = -_loc3_.region.x;
-               _loc7_.ty = -_loc3_.region.y;
-            }
-            _loc8_ = new Shape();
-            _loc8_.graphics.beginBitmapFill((_loc3_.parent as FlashTextureAtlasData).texture,_loc7_,false,true);
-            _loc8_.graphics.drawRect(0,0,_loc4_,_loc5_);
-            return _loc8_;
-         }
-         return null;
-      }
-      
-      public function get soundEventManager() : FlashArmatureDisplay
-      {
-         return _eventManager;
-      }
-   }
+	import flash.display.BitmapData;
+	import flash.display.Shape;
+	import flash.events.Event;
+	import flash.geom.Matrix;
+	import flash.utils.getTimer;
+	
+	import dragonBones.Armature;
+	import dragonBones.Slot;
+	import dragonBones.animation.WorldClock;
+	import dragonBones.core.BaseObject;
+	import dragonBones.core.dragonBones_internal;
+	import dragonBones.enum.DisplayType;
+	import dragonBones.factories.BaseFactory;
+	import dragonBones.factories.BuildArmaturePackage;
+	import dragonBones.objects.ActionData;
+	import dragonBones.objects.DisplayData;
+	import dragonBones.objects.SkinSlotData;
+	import dragonBones.objects.SlotData;
+	import dragonBones.parsers.DataParser;
+	import dragonBones.textures.TextureAtlasData;
+	
+	use namespace dragonBones_internal;
+	
+	/**
+	 * @language zh_CN
+	 * 基于 Flash 传统显示列表的工厂。
+	 * @version DragonBones 3.0
+	 */
+	public class FlashFactory extends BaseFactory
+	{
+		/**
+		 * @private
+		 */
+		protected static const _eventManager:FlashArmatureDisplay = new FlashArmatureDisplay();
+		/**
+		 * @private
+		 */
+		dragonBones_internal static const _clock:WorldClock = new WorldClock();
+		/**
+		 * @language zh_CN
+		 * 一个可以直接使用的全局工厂实例.
+		 * @version DragonBones 4.7
+		 */
+		public static const factory:FlashFactory = new FlashFactory();
+		/**
+		 * @private
+		 */
+		protected static function _clockHandler(event:Event):void 
+		{
+			const time:Number = getTimer() * 0.001;
+			const passedTime:Number = time - _clock.time;
+			_clock.advanceTime(passedTime);
+			_clock.time = time;
+		}
+		/**
+		 * @language zh_CN
+		 * 创建一个工厂。
+		 * @version DragonBones 3.0
+		 */
+		public function FlashFactory(dataParser:DataParser = null)
+		{
+			super(this, dataParser);
+		}
+		/**
+		 * @private
+		 */
+		override protected function _generateTextureAtlasData(textureAtlasData:TextureAtlasData, textureAtlas:Object):TextureAtlasData
+		{
+			if (textureAtlasData)
+			{
+				if (textureAtlas is BitmapData)
+				{
+					(textureAtlasData as FlashTextureAtlasData).texture = textureAtlas as BitmapData;
+				}
+			}
+			else
+			{
+				textureAtlasData = BaseObject.borrowObject(FlashTextureAtlasData) as FlashTextureAtlasData;
+			}
+			
+			return textureAtlasData;
+		}
+		/**
+		 * @private
+		 */
+		override protected function _generateArmature(dataPackage:BuildArmaturePackage):Armature
+		{
+			if (!_eventManager.hasEventListener(Event.ENTER_FRAME))
+			{
+				_clock.time = getTimer() * 0.001;
+				_eventManager.addEventListener(Event.ENTER_FRAME, _clockHandler, false, -999999);
+			}
+			
+			const armature:Armature = BaseObject.borrowObject(Armature) as Armature;
+			const armatureDisplay:FlashArmatureDisplay = new FlashArmatureDisplay();
+			armatureDisplay._armature = armature;
+			
+			armature._init(
+				dataPackage.armature, dataPackage.skin,
+				armatureDisplay, armatureDisplay, _eventManager
+			);
+			
+			return armature;
+		}
+		/**
+		 * @private
+		 */
+		override protected function _generateSlot(dataPackage:BuildArmaturePackage, skinSlotData:SkinSlotData, armature:Armature):Slot
+		{
+			const slot:FlashSlot = BaseObject.borrowObject(FlashSlot) as FlashSlot;
+			const slotData:SlotData = skinSlotData.slot;
+			const displayList:Vector.<Object> = new Vector.<Object>(skinSlotData.displays.length, true);
+			const slotDisplay:Shape = new Shape();
+			
+			slot._init(skinSlotData, slotDisplay, slotDisplay);
+			
+			for (var i:uint = 0, l:uint = skinSlotData.displays.length; i < l; ++i) 
+			{
+				const displayData:DisplayData = skinSlotData.displays[i];
+				switch (displayData.type)
+				{
+					case DisplayType.Image:
+						if (!displayData.texture)
+						{
+							displayData.texture = _getTextureData(dataPackage.dataName, displayData.path);
+						}
+						
+						if (dataPackage.textureAtlasName)
+						{
+							slot._textureDatas[i] = _getTextureData(dataPackage.textureAtlasName, displayData.path)
+						}
+						
+						displayList[i] = slot.rawDisplay;
+						break;
+					
+					case DisplayType.Mesh:
+						if (!displayData.texture)
+						{
+							displayData.texture = _getTextureData(dataPackage.dataName, displayData.path);
+						}
+						
+						if (dataPackage.textureAtlasName)
+						{
+							slot._textureDatas[i] = _getTextureData(dataPackage.textureAtlasName, displayData.path)
+						}
+						
+						displayList[i] = slot.meshDisplay;
+						break;
+					
+					case DisplayType.Armature:
+						const childArmature:Armature = buildArmature(displayData.path, dataPackage.dataName, null, dataPackage.textureAtlasName);
+						if (childArmature) 
+						{
+							if (!childArmature.inheritAnimation)
+							{
+								const actions:Vector.<ActionData> = slotData.actions.length > 0? slotData.actions: childArmature.armatureData.actions;
+								if (actions.length > 0) 
+								{
+									for each (var action:ActionData in actions) 
+									{
+										childArmature._bufferAction(action);
+									}
+								} 
+								else 
+								{
+									childArmature.animation.play();
+								}
+							}
+							
+							displayData.armature = childArmature.armatureData; // 
+						}
+						
+						displayList[i] = childArmature;
+						break;
+					
+					default:
+						displayList[i] = null;
+						break;
+				}
+			}
+			
+			slot._setDisplayList(displayList);
+			
+			return slot;
+		}
+		/**
+		 * @language zh_CN
+		 * 创建一个指定名称的骨架，并使用骨架的显示容器来更新骨架动画。
+		 * @param armatureName 骨架数据名称。
+		 * @param dragonBonesName 龙骨数据名称，如果未设置，将检索所有的龙骨数据，当多个数据中包含同名的骨架数据时，可能无法创建出准确的骨架。
+		 * @param skinName 皮肤名称，如果未设置，则使用默认皮肤。
+		 * @param textureAtlasName 贴图集数据名称，如果未设置，则使用龙骨数据名称。
+		 * @return 骨架的显示容器。
+		 * @see dragonBones.flash.FlashArmatureDisplay
+		 * @version DragonBones 4.5
+		 */
+		public function buildArmatureDisplay(armatureName:String, dragonBonesName:String = null, skinName:String = null, textureAtlasName:String = null):FlashArmatureDisplay
+		{
+			const armature:Armature = buildArmature(armatureName, dragonBonesName, skinName, textureAtlasName);
+			if (armature)
+			{
+				_clock.add(armature);
+				return armature.display as FlashArmatureDisplay;
+			}
+			
+			return null;
+		}
+		/**
+		 * @language zh_CN
+		 * 获取带有指定贴图的显示对象。
+		 * @param textureName 指定的贴图名称。
+		 * @param textureAtlasName 指定的贴图集数据名称，如果未设置，将检索所有的贴图集数据。
+		 * @version DragonBones 3.0
+		 */
+		public function getTextureDisplay(textureName:String, textureAtlasName:String = null):Shape 
+		{
+			const textureData:FlashTextureData = _getTextureData(textureAtlasName, textureName) as FlashTextureData;
+			if (textureData)
+			{
+				var width:Number = 0;
+				var height:Number = 0;
+				if (textureData.rotated)
+				{
+					width = textureData.region.height;
+					height = textureData.region.width;
+				}
+				else
+				{
+					height = textureData.region.height;
+					width = textureData.region.width;
+				}
+				
+				const scale:Number = 1 / textureData.parent.scale;
+				const helpMatrix:Matrix = new Matrix();
+				
+				if (textureData.rotated)
+				{
+					helpMatrix.a = 0;
+					helpMatrix.b = -scale;
+					helpMatrix.c = scale;
+					helpMatrix.d = 0;
+					helpMatrix.tx = - textureData.region.y;
+					helpMatrix.ty = textureData.region.x + height;
+				}
+				else
+				{
+					helpMatrix.a = scale;
+					helpMatrix.b = 0;
+					helpMatrix.c = 0;
+					helpMatrix.d = scale;
+					helpMatrix.tx = - textureData.region.x;
+					helpMatrix.ty = - textureData.region.y;
+				}
+				
+				const shape:Shape = new Shape();
+				shape.graphics.beginBitmapFill((textureData.parent as FlashTextureAtlasData).texture, helpMatrix, false, true);
+				shape.graphics.drawRect(0, 0, width, height);
+				
+				return shape;
+			}
+			
+			return null;
+		}
+		/**
+		 * @language zh_CN
+		 * 获取全局声音事件管理器。
+		 * @version DragonBones 3.0
+		 */
+		public function get soundEventManager(): FlashArmatureDisplay
+		{
+			return _eventManager;
+		}
+	}
 }
-
