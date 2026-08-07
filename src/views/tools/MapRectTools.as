@@ -154,7 +154,8 @@ package views.tools
       {
          if(!this.toolView)
          {
-            return null;
+            // return null;
+            return false; //
          }
          return this.toolView.selectedIndex != 0;
       }
