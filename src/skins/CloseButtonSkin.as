@@ -5,6 +5,7 @@ package skins
    import mx.core.DeferredInstanceFromFunction;
    import mx.core.IFlexModuleFactory;
    import mx.core.IStateClient2;
+   import mx.core.mx_internal; //
    import mx.states.AddItems;
    import mx.states.SetProperty;
    import mx.states.State;

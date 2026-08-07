@@ -5,6 +5,7 @@ package button
    import flash.geom.Rectangle;
    import mx.binding.BindingManager;
    import mx.core.IFlexModuleFactory;
+   import mx.core.mx_internal; //
    import mx.events.FlexEvent;
    import mx.events.PropertyChangeEvent;
    import skins.CloseButtonSkin;

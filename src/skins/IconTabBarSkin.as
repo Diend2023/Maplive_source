@@ -5,6 +5,7 @@ package skins
    import mx.core.IFlexModuleFactory;
    import mx.core.IStateClient2;
    import mx.core.UIComponent;
+   import mx.core.mx_internal; //
    import mx.events.PropertyChangeEvent;
    import mx.states.SetProperty;
    import mx.states.State;

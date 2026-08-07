@@ -1,6 +1,7 @@
 package views
 {
    import mx.core.IFlexModuleFactory;
+   import mx.core.mx_internal; //
    import mx.events.FlexEvent;
    import spark.components.Panel;
    

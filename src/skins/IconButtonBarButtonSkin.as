@@ -4,6 +4,7 @@ package skins
    import mx.core.DeferredInstanceFromFunction;
    import mx.core.IFlexModuleFactory;
    import mx.core.IStateClient2;
+   import mx.core.mx_internal; //
    import mx.events.PropertyChangeEvent;
    import mx.graphics.GradientEntry;
    import mx.graphics.LinearGradient;

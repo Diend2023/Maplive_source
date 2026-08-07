@@ -93,7 +93,8 @@ package tmx
                {
                   this.points.removeAt(this.points.indexOf((param1.target as PointSprite).point));
                   this.hasLineOr((param1.target as PointSprite).point,true);
-                  this._pointSprite.removeAt(this._pointSprite.indexOf(param1.target));
+                  // this._pointSprite.removeAt(this._pointSprite.indexOf(param1.target));
+                  this._pointSprite.removeAt(this._pointSprite.indexOf(param1.target as PointSprite)); //
                   (param1.target as DisplayObject).parent.removeChild(param1.target as DisplayObject);
                   this.onDraw();
                   break;

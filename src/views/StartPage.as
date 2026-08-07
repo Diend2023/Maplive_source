@@ -9,6 +9,7 @@ package views
    import mx.controls.Alert;
    import mx.core.DeferredInstanceFromFunction;
    import mx.core.IFlexModuleFactory;
+   import mx.core.mx_internal; //
    import mx.events.PropertyChangeEvent;
    import spark.components.Label;
    import spark.components.List;

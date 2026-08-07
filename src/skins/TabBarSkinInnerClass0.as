@@ -2,6 +2,7 @@ package skins
 {
    import button.ButtonBarBase;
    import mx.core.IFlexModuleFactory;
+   import mx.core.mx_internal; //
    import mx.events.PropertyChangeEvent;
    
    public class TabBarSkinInnerClass0 extends ButtonBarBase

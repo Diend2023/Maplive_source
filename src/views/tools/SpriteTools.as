@@ -7,6 +7,7 @@ package views.tools
    import mx.controls.Alert;
    import mx.core.DeferredInstanceFromFunction;
    import mx.core.IFlexModuleFactory;
+   import mx.core.mx_internal; //
    import mx.managers.PopUpManager;
    import skins.IconButtonSkin;
    import spark.components.Button;

@@ -103,7 +103,8 @@ package views.observe.role
       
       private var __moduleFactoryInitialized:Boolean = false;
       
-      public const timeline:Class;
+      // public const timeline:Class;
+      public var timeline:Class;
       
       public var currentFrameGroup:FrameGroup;
       

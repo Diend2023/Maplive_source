@@ -26,6 +26,7 @@ package views.observe.role
    import mx.controls.Alert;
    import mx.core.IFlexModuleFactory;
    import mx.core.UIComponent;
+   import mx.core.mx_internal; //
    import mx.events.PropertyChangeEvent;
    import mx.filters.*;
    import mx.styles.*;

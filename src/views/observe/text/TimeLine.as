@@ -25,6 +25,7 @@ package views.observe.text
    import mx.core.DeferredInstanceFromFunction;
    import mx.core.IFlexModuleFactory;
    import mx.core.UIComponent;
+   import mx.core.mx_internal; //
    import mx.events.FlexEvent;
    import mx.events.PropertyChangeEvent;
    import mx.filters.*;

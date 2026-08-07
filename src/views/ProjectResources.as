@@ -67,23 +67,32 @@ package views
       
       private var __moduleFactoryInitialized:Boolean = false;
       
-      public const map:Class;
+      // public const map:Class;
+      public var map:Class; //
       
-      public const picture:Class;
+      // public const picture:Class;
+      public var picture:Class; //
       
-      public const documentContent:Class;
+      // public const documentContent:Class;
+      public var documentContent:Class; //
       
-      public const sound:Class;
+      // public const sound:Class;
+      public var sound:Class; //
       
-      public const codeDir:Class;
+      // public const codeDir:Class;
+      public var codeDir:Class; //
       
-      public const code:Class;
+      // public const code:Class;
+      public var code:Class; //
       
-      public const folder:Class;
+      // public const folder:Class;
+      public var folder:Class; //
       
-      public const map_start:Class;
+      // public const map_start:Class;
+      public var map_start:Class; //
       
-      public const fight:Class;
+      // public const fight:Class;
+      public var fight:Class; //
       
       private var _findXmlData:XML;
       

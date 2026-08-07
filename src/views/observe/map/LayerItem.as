@@ -23,6 +23,7 @@ package views.observe.map
    import flash.xml.*;
    import mx.binding.*;
    import mx.core.IFlexModuleFactory;
+   import mx.core.mx_internal; //
    import mx.events.PropertyChangeEvent;
    import mx.filters.*;
    import mx.styles.*;
