@@ -11,8 +11,8 @@
 		"default-background-color": "#504f5e",
 		"default-frame-rate": 60,
 		"default-size": {
-			"width": 500,
-			"height": 500
+			"width": 1200,
+			"height": 800
 		},
 		"swf-version": 51
 	},
