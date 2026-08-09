@@ -56,7 +56,7 @@ mxmlc --debug=true +configname=air \
   --source-path+=src --library-path+=libs \
   --output=bin/Maplive.swf \
   --default-background-color=#504f5e \
-  --default-frame-rate=60 --default-size 500 500 \
+  --default-frame-rate=60 --default-size 1200 800 \
   --swf-version=51 \
   -- src\_Maplive_mx_managers_SystemManager.as
 ```
@@ -98,7 +98,7 @@ adl64.exe Maplive-app.xml
 - **jindrapetrik** - [jpexs-decompiler](https://github.com/jindrapetrik/jpexs-decompiler)
 - **DragonBones** - [DragonBones](https://github.com/DragonBones/DragonBonesAS)
 - **arkeus** - [as3-tiled-reader](https://github.com/arkeus/as3-tiled-reader)
-- **Apache Flex** - [Apache Flex 4.16.1](https://flex.apache.org/)
+- **Apache Flex** - [Apache Flex](https://flex.apache.org/)
 
 ## 声明
 
