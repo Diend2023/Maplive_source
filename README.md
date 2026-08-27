@@ -98,7 +98,8 @@ adl64.exe Maplive-app.xml
 - **jindrapetrik** - [jpexs-decompiler](https://github.com/jindrapetrik/jpexs-decompiler)
 - **DragonBones** - [DragonBones](https://github.com/DragonBones/DragonBonesAS)
 - **arkeus** - [as3-tiled-reader](https://github.com/arkeus/as3-tiled-reader)
-- **Apache Flex** - [Apache Flex](https://flex.apache.org/)
+- **Apache** - [Apache Flex](https://flex.apache.org)
+- **HARMAN** - [Adobe AIR SDK from HARMAN](https://airsdk.harman.com)
 
 ## 声明
 
